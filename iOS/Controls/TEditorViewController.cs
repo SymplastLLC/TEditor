@@ -239,6 +239,11 @@ namespace TEditor
             _richTextEditor.AutoFocusInput = autoFocusInput;
         }
 
+        public void SetMacrosDicitionary(Dictionary<string, string> macros)
+        {
+            _richTextEditor.Macros = macros;
+        }
+
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();

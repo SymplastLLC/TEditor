@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TEditor.Abstractions;
 using UIKit;
@@ -7,7 +8,7 @@ namespace TEditor
 {
     public class TEditorImplementation : BaseTEditor
     {
-        public override Task<TEditorResponse> ShowTEditor(string html, ToolbarBuilder toolbarBuilder = null, bool autoFocusInput = false)
+        public override Task<TEditorResponse> ShowTEditor(string html, ToolbarBuilder toolbarBuilder = null, bool autoFocusInput = false, Dictionary<string, string> macros = null)
         {
             TaskCompletionSource<TEditorResponse> taskRes = new TaskCompletionSource<TEditorResponse>();
             var tvc = new TEditorViewController();
@@ -18,6 +19,8 @@ namespace TEditor
             tvc.SetHTML(html);
             tvc.SetAutoFocusInput(autoFocusInput);
             tvc.Title = CrossTEditor.PageTitle;
+
+            tvc.SetMacrosDicitionary(macros);
 
             UINavigationController nav = null;
             foreach (var vc in

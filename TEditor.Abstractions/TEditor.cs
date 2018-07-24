@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
 
@@ -12,6 +12,7 @@ namespace TEditor.Abstractions
             FormatHTML = false;
             InternalHTML = string.Empty;
             AutoFocusInput = false;
+            Macros = new Dictionary<string, string>();
         }
 
         public string InternalHTML { get; set; }
@@ -21,6 +22,8 @@ namespace TEditor.Abstractions
         public bool FormatHTML { get; set; }
 
         public bool AutoFocusInput { get; set; }
+
+        public Dictionary<string, string> Macros { get; set; }
 
         public string LoadResources()
         {

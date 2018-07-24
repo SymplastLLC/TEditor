@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -9,7 +10,7 @@ namespace TEditor
     public class TEditorImplementation : BaseTEditor
     {
         public static ToolbarBuilder ToolbarBuilder = null;
-        public override Task<TEditorResponse> ShowTEditor(string html, ToolbarBuilder toolbarBuilder = null, bool autoFocusInput = false)
+        public override Task<TEditorResponse> ShowTEditor(string html, ToolbarBuilder toolbarBuilder = null, bool autoFocusInput = false, Dictionary<string, string> macros = null)
         {
             var result = new TaskCompletionSource<TEditorResponse>();
 
@@ -19,6 +20,13 @@ namespace TEditor
                 ToolbarBuilder = new ToolbarBuilder().AddAll();
             tActivity.PutExtra("HTMLString", html);
             tActivity.PutExtra("AutoFocusInput", autoFocusInput);
+
+            if (macros != null)
+            {
+                tActivity.PutStringArrayListExtra("macroKeys", macros.Keys.ToList());
+                tActivity.PutStringArrayListExtra("macroValues", macros.Values.ToList());
+            }
+
             tActivity.SetFlags(ActivityFlags.NewTask);
             TEditorActivity.SetOutput = (res, resStr) =>
             {

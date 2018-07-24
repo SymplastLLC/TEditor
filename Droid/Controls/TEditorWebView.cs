@@ -170,6 +170,14 @@ namespace TEditor
         {
             _richTextEditor.InternalHTML = html;
             _richTextEditor.UpdateHTML();
+
+
+        }
+
+        public void InsertHTML(string html)
+        {
+            _richTextEditor.InternalHTML = _richTextEditor.InternalHTML + html;
+            _richTextEditor.UpdateHTML();
         }
 
         public async Task<string> GetHTML()

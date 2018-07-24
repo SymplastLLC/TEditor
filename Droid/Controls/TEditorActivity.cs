@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Android.App;
 using Android.Widget;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace TEditor
 {
     [Activity(Label = "TEditorActivity",
-        WindowSoftInputMode = Android.Views.SoftInput.AdjustResize | Android.Views.SoftInput.StateHidden,
+        WindowSoftInputMode = Android.Views.SoftInput.AdjustResize | Android.Views.SoftInput.StateVisible,
         Theme = "@style/Theme.AppCompat.NoActionBar.FullScreen")]
     public class TEditorActivity : AppCompatActivity
     {
@@ -20,6 +21,9 @@ namespace TEditor
         LinearLayoutDetectsSoftKeyboard _rootLayout;
         LinearLayout _toolbarLayout;
         Android.Support.V7.Widget.Toolbar _topToolBar;
+
+        private IList<string> _macros;
+        private IList<string> _macrosValues;
 
         public static Action<bool, string> SetOutput { get; set; }
 
@@ -33,7 +37,6 @@ namespace TEditor
 
             _topToolBar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.TopToolbar);
 
-
             _topToolBar.Title = CrossTEditor.PageTitle;
    
             SetSupportActionBar(_topToolBar);
@@ -43,7 +46,6 @@ namespace TEditor
                 SupportActionBar.SetDisplayHomeAsUpEnabled(true);
                 SupportActionBar.SetDisplayShowHomeEnabled(true);
                 SupportActionBar.SetDisplayShowCustomEnabled(true);
-
 
             }
 
@@ -61,6 +63,10 @@ namespace TEditor
 
             bool autoFocusInput = Intent.GetBooleanExtra("AutoFocusInput", false);
             _editorWebView.SetAutoFocusInput(autoFocusInput);
+
+
+            _macros = Intent.GetStringArrayListExtra("macroKeys");
+            _macrosValues = Intent.GetStringArrayListExtra("macroValues");
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -83,12 +89,45 @@ namespace TEditor
                     Finish();
                 });
             }
-            else
+            else if (item.TitleFormatted?.ToString() == "Macros")
             {
-                SetOutput?.Invoke(false, null);
+                PromptMacros();
             }
 
             return base.OnOptionsItemSelected(item);
+        }
+
+        private void PromptMacros()
+        {
+            var builderSingle = new Android.App.AlertDialog.Builder(this);
+
+            builderSingle.SetTitle("Select Macro");
+
+            var negative = new EventHandler<DialogClickEventArgs>(
+                (s, args) =>
+                {
+                    
+                });
+
+            var positive = new EventHandler<DialogClickEventArgs>(
+                (s, args) =>
+                {
+                   
+                    if (_macrosValues != null && _macrosValues.Count > args.Which)
+                        {
+                    
+                            var value = _macrosValues[args.Which];
+
+                             _editorWebView.InsertHTML(value);
+                        }         
+                });
+
+            builderSingle.SetItems(_macros.ToArray(), positive);
+            builderSingle.SetNegativeButton("Cancel", negative);
+
+            var adialog = builderSingle.Create();
+
+            adialog.Show();
         }
 
         public override bool OnSupportNavigateUp()
