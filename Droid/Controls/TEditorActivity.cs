@@ -6,13 +6,14 @@ using Android.Views;
 using Android.Content;
 using Android.Support.V7.App;
 using TEditor.Abstractions;
+using System.Threading.Tasks;
 
 namespace TEditor
 {
     [Activity(Label = "TEditorActivity",
         WindowSoftInputMode = Android.Views.SoftInput.AdjustResize | Android.Views.SoftInput.StateHidden,
         Theme = "@style/Theme.AppCompat.NoActionBar.FullScreen")]
-    public class TEditorActivity : Activity
+    public class TEditorActivity : AppCompatActivity
     {
         const int ToolbarFixHeight = 60;
         TEditorWebView _editorWebView;
@@ -31,23 +32,20 @@ namespace TEditor
             SetContentView(Resource.Layout.TEditorActivity);
 
             _topToolBar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.TopToolbar);
+
+
             _topToolBar.Title = CrossTEditor.PageTitle;
-            _topToolBar.InflateMenu(Resource.Menu.TopToolbarMenu);
-            _topToolBar.MenuItemClick += async (sender, e) =>
+   
+            SetSupportActionBar(_topToolBar);
+
+            if (SupportActionBar != null)
             {
-                if (SetOutput != null)
-                {
-                    if (e.Item.TitleFormatted.ToString() == "Save")
-                    {
-                        string html = await _editorWebView.GetHTML();
-                        SetOutput.Invoke(true, html);
-                    }
-                    else {
-                        SetOutput.Invoke(false, null);
-                    }
-                }
-                Finish();
-            };
+                SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+                SupportActionBar.SetDisplayShowHomeEnabled(true);
+                SupportActionBar.SetDisplayShowCustomEnabled(true);
+
+
+            }
 
             _rootLayout = FindViewById<LinearLayoutDetectsSoftKeyboard>(Resource.Id.RootRelativeLayout);
             _editorWebView = FindViewById<TEditorWebView>(Resource.Id.EditorWebView);
@@ -63,6 +61,40 @@ namespace TEditor
 
             bool autoFocusInput = Intent.GetBooleanExtra("AutoFocusInput", false);
             _editorWebView.SetAutoFocusInput(autoFocusInput);
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.TopToolbarMenu, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.TitleFormatted?.ToString() == "Save")
+            {
+                Task<string> action = _editorWebView.GetHTML();
+
+                action.ContinueWith(x =>
+                {
+                    string html = x.Result;
+                    SetOutput?.Invoke(true, html);
+
+                    Finish();
+                });
+            }
+            else
+            {
+                SetOutput?.Invoke(false, null);
+            }
+
+            return base.OnOptionsItemSelected(item);
+        }
+
+        public override bool OnSupportNavigateUp()
+        {
+            OnBackPressed();
+            return true;
         }
 
         protected override void Dispose(bool disposing)
