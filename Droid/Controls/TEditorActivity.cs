@@ -22,6 +22,8 @@ namespace TEditor
 
         public static Action<bool, string> SetOutput { get; set; }
 
+        private static Android.Graphics.Color _keysColor = Android.Graphics.Color.ParseColor("#FAFAFA");
+
         protected override void OnCreate(Android.OS.Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -78,6 +80,9 @@ namespace TEditor
             foreach (var item in builder)
             {
                 ImageButton imagebutton = new ImageButton(this);
+                imagebutton.SetBackgroundColor(_keysColor);
+                //
+                //
                 imagebutton.Click += (sender, e) =>
                 {
                     item.ClickFunc.Invoke(_editorWebView.RichTextEditor);
