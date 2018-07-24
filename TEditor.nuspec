@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>TEditor</id>
-    <version>1.0.3</version>
-    <title>TEditor</title>
-    <authors>XAM Consulting</authors>
-    <owners>XAM Consulting</owners>
-    <projectUrl>https://github.com/XAM-Consulting/TEditor</projectUrl>
+    <id>TEditor.VK</id>
+    <version>1.0.5</version>
+    <title>TEditor.VK</title>
+    <authors>Vadim Koystinen</authors>
+    <owners>Vadim Koystinen</owners>
+    <projectUrl>https://github.com/SymplastLLC/TEditor</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Awesome HTML editor in Xamarin.Forms</description>
+    <description>Fork of Awesome HTML editor in Xamarin.Forms with fixes</description>
     <tags>Xamarin, Xamarin.Forms, TEditor</tags>
     <releaseNotes>
 1.0.0
@@ -22,6 +22,13 @@
 
 1.0.3
 [fix] iOS 11 crash issue.
+
+1.0.4
+[fix] Android Colors
+[Feature] Macros
+
+1.0.5
+[fix] Android Scrolling
     </releaseNotes>
   </metadata>
   <files>

@@ -110,15 +110,13 @@ namespace TEditor
                 });
 
             var positive = new EventHandler<DialogClickEventArgs>(
-                (s, args) =>
-                {
-                   
+                async (s, args) =>
+                {                
                     if (_macrosValues != null && _macrosValues.Count > args.Which)
                         {
-                    
                             var value = _macrosValues[args.Which];
-
-                             _editorWebView.InsertHTML(value);
+                            var currentHtml = await _editorWebView.GetHTML();                              
+                             _editorWebView.SetHTML(currentHtml + value);
                         }         
                 });
 
