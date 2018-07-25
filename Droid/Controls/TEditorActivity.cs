@@ -116,7 +116,7 @@ namespace TEditor
                         {
                             var value = _macrosValues[args.Which];
                             var currentHtml = await _editorWebView.GetHTML();                              
-                             _editorWebView.SetHTML(currentHtml + value);
+                             _editorWebView.SetHTML(currentHtml + value + "<br/>");
                         }         
                 });
 
@@ -131,6 +131,7 @@ namespace TEditor
         public override bool OnSupportNavigateUp()
         {
             OnBackPressed();
+            SetOutput?.Invoke(false, null);
             return true;
         }
 
@@ -175,16 +176,18 @@ namespace TEditor
                 int toolbarHeight = _toolbarLayout.MeasuredHeight == 0 ? (int)(ToolbarFixHeight * Resources.DisplayMetrics.Density) : _toolbarLayout.MeasuredHeight;
                 int topToolbarHeight = _topToolBar.MeasuredHeight == 0 ? (int)(ToolbarFixHeight * Resources.DisplayMetrics.Density) : _topToolBar.MeasuredHeight;
                 int editorHeight = newHeight - toolbarHeight - topToolbarHeight;
+
                 _editorWebView.LayoutParameters.Height = editorHeight;
                 _editorWebView.LayoutParameters.Width = LinearLayout.LayoutParams.MatchParent;
                 _editorWebView.RequestLayout();
             }
-            else {
+            else 
+            {
                 if (newHeight != 0)
                 {
                     _toolbarLayout.Visibility = Android.Views.ViewStates.Invisible;
                     _editorWebView.LayoutParameters = new LinearLayout.LayoutParams(-1, -1);
-                    ;
+
                 }
             }
         }

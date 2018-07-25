@@ -52,6 +52,7 @@ zss_editor.init = function() {
     $(document).on('selectionchange',function(e){
                    zss_editor.calculateEditorHeightWithCaretPosition();
                    zss_editor.setScrollPosition();
+                   zss_editor.enabledEditingItems(e);
                    });
     
     $(window).on('scroll', function(e) {
@@ -152,14 +153,17 @@ zss_editor.setFooterHeight = function(footerHeight) {
 }
 
 zss_editor.getCaretYPosition = function() {
+
     var sel = window.getSelection();
-    var topPosition;
-    var range;
-    
-    if (sel.rangeCount > 0) {
-        range = sel.getRangeAt(0);
-        topPosition = range.getBoundingClientRect().top;
-    }
+    // Next line is comented to prevent deselecting selection. It looks like work but if there are any issues will appear then uconmment it as well as code above.
+    //sel.collapseToStart();
+    var range = sel.getRangeAt(0);
+    var span = document.createElement('span');// something happening here preventing selection of elements
+    //range.collapse(false); this kills perfomane on android
+    range.insertNode(span);
+    var topPosition = span.offsetTop;
+    span.parentNode.removeChild(span);
+
 
     return topPosition; 
 }
@@ -183,7 +187,7 @@ zss_editor.calculateEditorHeightWithCaretPosition = function() {
         var newPos = c - height + padding - 18;
     }
     
-    window.scrollTo(0, newPos);
+    window.scrollTo(0, newPos );
 }
 
 zss_editor.backuprange = function(){

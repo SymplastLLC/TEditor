@@ -41,6 +41,9 @@ namespace TEditor.Forms.Sample
 
             var test = "<!-- This is an HTML comment --><p>This is a test of the <strong style=\"font-size:20px\">TEditor</strong> by <a title=\"XAM consulting\" href=\"http://www.xam-consulting.com\">XAM consulting</a></p>";
 
+      
+
+
             TEditorResponse response = await CrossTEditor.Current.ShowTEditor(test, autoFocusInput: true, macros: macrosDic);
             if (response.IsSave) {
                 if (response.HTML != null) {
