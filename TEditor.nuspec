@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>TEditor.VK</id>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <title>TEditor.VK</title>
     <authors>Vadim Koystinen</authors>
     <owners>Vadim Koystinen</owners>
@@ -29,6 +29,9 @@
 
 1.0.5
 [fix] Android Scrolling
+
+1.0.6
+[fix] Android Scrolling perfomance
     </releaseNotes>
   </metadata>
   <files>
